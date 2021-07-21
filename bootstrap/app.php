@@ -76,7 +76,7 @@ $app->configure('app');
 // ]);
 
 $app->routeMiddleware([
-    'auth' => App\Http\Middleware\Authenticate::class,
+    'auth.role' => App\Http\Middleware\Authorization::class,
 ]);
 
 /*

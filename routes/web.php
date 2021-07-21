@@ -19,5 +19,11 @@ $router->post('/login', [
 $router->get('/me', [
     'as' => 'me',
     'uses' => 'AuthController@me',
-    'middleware' => 'auth',
+    'middleware' => 'auth.role:user',
+]);
+
+$router->get('/users', [
+    'as' => 'users',
+    'uses' => 'AuthController@getAllUsers',
+    'middleware' => 'auth.role:admin',
 ]);

@@ -7,11 +7,6 @@ use App\Models\User;
 
 class AuthController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
-    }
-
     /**
      * Store a new user.
      *
@@ -24,6 +19,7 @@ class AuthController extends Controller
         $this->validate($request, [
             'username' => 'required|string|unique:users',
             'password' => 'required|confirmed',
+            'role' => 'required|string',
         ]);
 
         // Add in database
@@ -31,6 +27,7 @@ class AuthController extends Controller
             $user = new User;
             $user->username = $request->input('username');
             $user->password = app('hash')->make($request->input('password'));
+            $user->role = $request->input('role');
             $user->save();
 
             return response()->json([
@@ -84,6 +81,25 @@ class AuthController extends Controller
      */	
     public function me()
     {
-        return response()->json(auth()->user());
+        return response()->json([
+            'data' => auth()->user(),
+            'success' => true,
+            'code' => 200,
+        ], 200);
+    }
+
+    /**
+     * Get all users
+     * 
+     * @param  Request $request
+     * @return Response
+     */
+    public function getAllUsers()
+    {
+        return response()->json([
+            'data' => User::all(),
+            'success' => true,
+            'code' => 200,
+        ], 200);
     }
 }
